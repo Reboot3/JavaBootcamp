@@ -2,6 +2,7 @@ package day3;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
 
@@ -17,14 +18,23 @@ public class Day3UITests {
         driver = new FirefoxDriver();
 
         openMainPage();
-        typeQuery();
-       // submitQuery();
-       // checkingResult();
-
+        typeQuery("Automation");
+        submitQuery();
+        checkResult();
     }
 
-    private void typeQuery() {
-        driver.findElement(By.cssSelector(".gLFyf"));
+    private void checkResult() {
+       boolean isDisplayed = driver.findElement(By.id("resultStats")).isDisplayed();
+        System.out.println("isDisplayed:" + isDisplayed);
+    }
+
+    private void submitQuery() {
+        driver.findElement(By.cssSelector(".FPdoLc > center:nth-child(1) > input:nth-child(1)")).click();
+    }
+
+    private void typeQuery(String query) {
+        WebElement webElement = driver.findElement(By.cssSelector(".gLFyf"));
+        webElement.sendKeys(query);
     }
 
     private void openMainPage() {
