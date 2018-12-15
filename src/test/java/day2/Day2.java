@@ -422,5 +422,10 @@ public class Day2 {
 
     }
 
+    @Test
+    public void test032() throws Exception {
+        User user = new User();
 
+
+    }
 }
