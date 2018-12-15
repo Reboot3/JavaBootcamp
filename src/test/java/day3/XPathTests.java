@@ -31,7 +31,7 @@ public class XPathTests {
         String xPath6 = "//input[@name='password' and @type='password']";
         String xPath7 = "//input[@name='password' or @type='password']";
         String xPath8 = "//*[starts-with(@name,'pass')]";
-        String xPath9 = "//*[text()='Log In";
+        String xPath9 = "//*[text()='Log In']";
         String xPath10 = "//*[@type='text'])[last()]";
         String xPath11 = "//*[@type='text'])[position()=1]";
 
