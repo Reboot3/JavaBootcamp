@@ -11,14 +11,22 @@ public class DiceTests {
 
     WebDriver driver;
     String mainPage = "https://www.dice.com/";
+
     By searchFieldKeyword = By.id("search-field-keyword");
+    By searchFieldLocation = By.id("search-field-location");
 
     @Test
     public void test001() throws Exception {
         String keywordForSearch = "Webdriver";
+        String location = "San Francisco";
 
         openMainPage();
         typeKeyword(keywordForSearch);
+        typeLocation(location);
+    }
+
+    private void typeLocation(String location) {
+        driver.findElement(searchFieldLocation).sendKeys(location);
     }
 
     private void typeKeyword(String keywordForSearch) {
