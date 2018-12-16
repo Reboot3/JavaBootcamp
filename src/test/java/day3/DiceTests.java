@@ -3,6 +3,9 @@ package day3;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -14,6 +17,8 @@ public class DiceTests {
 
     By searchFieldKeyword = By.id("search-field-keyword");
     By searchFieldLocation = By.id("search-field-location");
+    By searchButton = By.id("findTechJobs");
+    By countMobileId = By.id("posiCountMobileId");
 
     @Test
     public void test001() throws Exception {
@@ -23,9 +28,27 @@ public class DiceTests {
         openMainPage();
         typeKeyword(keywordForSearch);
         typeLocation(location);
+        submitSearch();
+        assertResultsPage();
+    }
+
+    private void assertResultsPage() {
+        waitForElement(countMobileId);
+        boolean isDisplayed = driver.findElement(countMobileId).isDisplayed();
+        Assert.assertTrue(isDisplayed);
+    }
+
+    private void waitForElement(By elementLocator) {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(elementLocator));
+    }
+
+    private void submitSearch() {
+        driver.findElement(searchButton).click();
     }
 
     private void typeLocation(String location) {
+        driver.findElement(searchFieldLocation).clear();
         driver.findElement(searchFieldLocation).sendKeys(location);
     }
 
