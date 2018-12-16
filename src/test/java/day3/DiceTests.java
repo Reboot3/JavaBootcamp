@@ -32,6 +32,60 @@ public class DiceTests {
         assertResultsPage();
     }
 
+    @Test
+    public void test002() throws Exception {
+        String keywordForSearch = "TestNG";
+        String location = "San Francisco";
+
+        openMainPage();
+        typeKeyword(keywordForSearch);
+        typeLocation(location);
+        submitSearch();
+        assertResultsPage();
+    }
+
+    // sign in test
+    @Test
+    public void test003() throws Exception {
+        // openMainPage();
+        // click SingIn button
+        // type Email
+        // type Password
+        // click Login button
+        // assert that you logged in
+    }
+
+    //advanced search
+    @Test
+    public void test004() throws Exception {
+        // openMainPage();
+        // click Advanced Search
+        // type keyword
+        // type city
+        // scroll to slider
+        // move slider to higher value
+        // click advanced search
+        // assert search was done
+    }
+
+    //search for part-time jobs
+    @Test
+    public void test_partTime() throws Exception {
+
+    }
+
+    //skills center
+    @Test
+    public void test_skills_Center() throws Exception {
+        //click Career
+        //chose skills center from dropdown list
+        //type keyword
+        //submit
+        //assert search
+    }
+
+
+
     private void assertResultsPage() {
         waitForElement(countMobileId);
         boolean isDisplayed = driver.findElement(countMobileId).isDisplayed();
