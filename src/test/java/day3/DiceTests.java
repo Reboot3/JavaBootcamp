@@ -18,7 +18,7 @@ public class DiceTests {
     By searchFieldKeyword = By.id("search-field-keyword");
     By searchFieldLocation = By.id("search-field-location");
     By searchButton = By.id("findTechJobs");
-    By countMobileId = By.id("posiCountMobileId");
+    By countMobileId = By.id("posiCountId");
 
     @Test
     public void test001() throws Exception {
