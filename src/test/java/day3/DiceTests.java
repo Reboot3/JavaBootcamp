@@ -2,11 +2,11 @@ package day3;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -19,6 +19,13 @@ public class DiceTests {
     By searchFieldLocation = By.id("search-field-location");
     By searchButton = By.id("findTechJobs");
     By countMobileId = By.id("posiCountId");
+    By signinButtonId = By.id("Login_1");
+    By emailFieldId = By.id("Email_1");
+    By passwordFieldId = By.id("Password_1");
+    By loginButtonId = By.id("LoginBtn_1");
+    By accountNameId = By.id("dice-login-customer-name");
+    By signoutButton = By.cssSelector("button.btn.btn-link");
+
 
     @Test
     public void test001() throws Exception {
@@ -47,14 +54,21 @@ public class DiceTests {
     // sign in test
     @Test
     public void test003() throws Exception {
-        // openMainPage();
-        // click SingIn button
-        // type Email
-        // type Password
-        // click Login button
-        // assert that you logged in
+         openMainPage();
+         signinButton().click();
+         String email = "a6509960921@gmail.com";
+         emailTextField().sendKeys(email);
+         passwordTextField().sendKeys("MySecurePassword2019");
+         logingButton().click();
+         boolean elementDisplayed = accountName().isDisplayed();
+         Assert.assertTrue(elementDisplayed);
+         String userName = accountName().getText();
+         Assert.assertEquals(userName, "Aleksei Petrovski");
+         accountName().click();
+         signoutButton().click();
+         Assert.assertEquals(pageTitle(), "Sign In");
     }
-
+    
     //advanced search
     @Test
     public void test004() throws Exception {
@@ -114,6 +128,34 @@ public class DiceTests {
         driver.get(mainPage);
     }
 
+    private WebElement signinButton() {
+        return driver.findElement(signinButtonId);
+    }
+
+    private String pageTitle() {
+        return driver.getTitle();
+    }
+
+    private WebElement signoutButton() {
+        return driver.findElement(signoutButton);
+    }
+
+    private WebElement accountName() {
+        return driver.findElement(accountNameId);
+    }
+
+    private WebElement logingButton() {
+        return driver.findElement(loginButtonId);
+    }
+
+    private WebElement passwordTextField() {
+        return driver.findElement(passwordFieldId);
+    }
+
+    private WebElement emailTextField() {
+        return driver.findElement(emailFieldId);
+    }
+
     @BeforeSuite
     public void setup(){
         String path = System.getProperty("user.dir") + "/src/test/resources/geckodriver";
@@ -121,3 +163,13 @@ public class DiceTests {
         driver = new FirefoxDriver();
     }
 }
+
+
+
+
+
+
+
+
+
+
