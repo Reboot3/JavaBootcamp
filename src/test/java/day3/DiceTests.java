@@ -1,14 +1,14 @@
 package day3;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+
+import javax.swing.*;
 
 public class DiceTests {
 
@@ -25,6 +25,16 @@ public class DiceTests {
     By loginButtonId = By.id("LoginBtn_1");
     By accountNameId = By.id("dice-login-customer-name");
     By signoutButton = By.cssSelector("button.btn.btn-link");
+    By advancedSearchBtn = By.xpath("//*[text()='Advanced Search']");
+
+
+    //Advanced Search
+    By searchKeywords = By.id("for_one");
+    By searchLocationField = By.id("for_loc");
+    By searchRadiusSlider = By.id("radiusMileAnchor");
+    By advancedSearchButton = By.id("adv_search");
+    By searchResultHeader = By.cssSelector("h1.pull-left.h1.jobs-page-header-h1");
+    By navBarButton = By.xpath("//button[@class='navbar-toggle']");
 
 
     @Test
@@ -68,18 +78,71 @@ public class DiceTests {
          signoutButton().click();
          Assert.assertEquals(pageTitle(), "Sign In");
     }
-    
+
     //advanced search
     @Test
     public void test004() throws Exception {
-        // openMainPage();
-        // click Advanced Search
-        // type keyword
-        // type city
-        // scroll to slider
-        // move slider to higher value
-        // click advanced search
-        // assert search was done
+         openMainPage();
+         advanced_search_button().click();
+         searchKeywordsField().sendKeys("QA");
+        searchLocationField().clear();
+         searchLocationField().sendKeys("Los Altos, CA");
+         scrollToElement(radiusSearchSlider());
+         moveRadiusToValue("75 miles");
+         advancedSearchButton().click();
+
+         waitForElement(searchResultHeader);
+         String jobTitle = searchResultHeader().getText();
+         Assert.assertEquals(jobTitle, "(QA) jobs in Los Altos, CA");
+    }
+
+    //Responsive design
+    @Test
+    public void test005() {
+        openMainPage();
+        boolean isDisplayed = navBarToggleButton().isDisplayed();
+        Assert.assertFalse(isDisplayed);
+        Dimension dimension = new Dimension(991, 800);
+        driver.manage().window().setSize(dimension);
+        isDisplayed = navBarToggleButton().isDisplayed();
+        Assert.assertTrue(isDisplayed);
+    }
+
+    private WebElement navBarToggleButton() {
+        return driver.findElement(navBarButton);
+    }
+
+    private WebElement searchResultHeader() {
+        return driver.findElement(searchResultHeader);
+    }
+
+    private WebElement advancedSearchButton() {
+        return driver.findElement(advancedSearchButton);
+    }
+
+    private void moveRadiusToValue(String radius) {
+        //TODO update method to move slider to radius value
+        radiusSearchSlider().sendKeys(Keys.ARROW_RIGHT);
+    }
+
+    private WebElement radiusSearchSlider() {
+        return driver.findElement(searchRadiusSlider);
+    }
+
+    private WebElement searchLocationField() {
+        return driver.findElement(searchLocationField);
+    }
+
+    private WebElement searchKeywordsField() {
+        return driver.findElement(searchKeywords);
+    }
+
+    private WebElement advanced_search_button() {
+        return driver.findElement(advancedSearchBtn);
+    }
+
+    private void scrollToElement(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     //search for part-time jobs
