@@ -8,6 +8,14 @@
     <artifactId>JavaBootCampNov</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <defaultSuiteFiles>default.xml</defaultSuiteFiles>
+        <suiteFile>${defaultSuiteFiles}</suiteFile>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
 
     <dependencies>
 
@@ -37,7 +45,7 @@
                     <version>2.22.0</version>
                     <configuration>
                         <suiteXmlFiles>
-                            <suiteXmlFile>testng.xml</suiteXmlFile>
+                            <suiteXmlFile>${suiteFile}</suiteXmlFile>
                         </suiteXmlFiles>
                     </configuration>
                 </plugin>
