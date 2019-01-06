@@ -6,7 +6,7 @@
         <classes>
             <class name="day3.DiceTests">
                 <methods>
-                    <include name="test_skills_Center_negative" />
+                    <include name="test001" />
                 </methods>
             </class>
         </classes>
