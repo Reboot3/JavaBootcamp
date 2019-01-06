@@ -5,6 +5,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -36,6 +37,15 @@ public class DiceTests {
     By searchResultHeader = By.cssSelector("h1.pull-left.h1.jobs-page-header-h1");
     By navBarButton = By.xpath("//button[@class='navbar-toggle']");
 
+    //Part-Time
+    By partTimeCheckBox = By.xpath("//input[@class='typeChkBox' and @value='Part Time']");
+
+    //Skills Center
+    By skillsCenterXpath = By.xpath("//a[text()='Skills Center']");
+    By inputSkillTextField = By.xpath("//*[@class='form-control input-lg enterSkill']");
+    By submitSkillsSearchButton = By.xpath("//*[@class='btn btn-default btn-lg']");
+    By skillCenterPageHeader = By.xpath("//*[@class='skills-header']/div/div[2]/div/h1");
+
 
     @Test
     public void test001() throws Exception {
@@ -47,6 +57,19 @@ public class DiceTests {
         typeLocation(location);
         submitSearch();
         assertResultsPage();
+    }
+
+    @Test
+    public void test001_neg() throws Exception {
+        String keywordForSearch = "3r34r34r34";
+        String location = "San Francisco";
+
+        openMainPage();
+        typeKeyword(keywordForSearch);
+        typeLocation(location);
+        submitSearch();
+        waitForElement(getElementByPartialText("No jobs"));
+        assertNoResultsPage();
     }
 
     @Test
@@ -85,7 +108,7 @@ public class DiceTests {
          openMainPage();
          advanced_search_button().click();
          searchKeywordsField().sendKeys("QA");
-        searchLocationField().clear();
+         searchLocationField().clear();
          searchLocationField().sendKeys("Los Altos, CA");
          scrollToElement(radiusSearchSlider());
          moveRadiusToValue("75 miles");
@@ -148,24 +171,90 @@ public class DiceTests {
     //search for part-time jobs
     @Test
     public void test_partTime() throws Exception {
+        openMainPage();
+        submitSearch();
+        waitForElement(partTimeCheckBox);
+        selectPartTimeBox();
+        assertTitleContainsText("Part-Time");
+    }
 
+    private void assertTitleContainsText(String textToContain) {
+        By elementByPartialText = getElementByPartialText(textToContain);
+        WebElement jobsPageheader = driver.findElement(elementByPartialText);
+        Assert.assertTrue(jobsPageheader.isDisplayed());
+    }
+
+    private void selectPartTimeBox() {
+        driver.findElement(partTimeCheckBox).click();
     }
 
     //skills center
     @Test
     public void test_skills_Center() throws Exception {
+        openMainPage();
+
         //click Career
+        openTechCareersList();
+
         //chose skills center from dropdown list
+        chooseSkillsCenter();
+
         //type keyword
+        typeSkillToSearch("Webdriver");
+
         //submit
+        submitSkillsSearch();
+
+        //wait for Search Results page
+        waitForElement(skillCenterPageHeader);
+
         //assert search
+        assertHeaderText("WebDriver");
     }
 
+    @Test
+    public void test_skills_Center_negative() {
+        openMainPage();
+        openTechCareersList();
+        chooseSkillsCenter();
+        typeSkillToSearch("sdasfadfasdfasdfasdfasdf");
+        submitSkillsSearch();
+        waitForElement(skillCenterPageHeader);
+        assertHeaderText("WebDriver");
+    }
+
+    private void assertHeaderText(String expectedText) {
+       String headersText = driver.findElement(skillCenterPageHeader).getText();
+
+       Assert.assertTrue(headersText.contains(expectedText));
+    }
+
+    private void submitSkillsSearch() {
+        driver.findElement(submitSkillsSearchButton).click();
+    }
+
+    private void typeSkillToSearch(String textToInput) {
+        driver.findElement(inputSkillTextField).sendKeys(textToInput);
+    }
+
+    private void chooseSkillsCenter() {
+        driver.findElement(skillsCenterXpath).click();
+    }
+
+    private void openTechCareersList() {
+        driver.findElement(By.id("smart-toggle-Career")).click();
+    }
 
 
     private void assertResultsPage() {
         waitForElement(countMobileId);
         boolean isDisplayed = driver.findElement(countMobileId).isDisplayed();
+        Assert.assertTrue(isDisplayed);
+    }
+
+    private void assertNoResultsPage() {
+        By resultsNoJobs = getElementByPartialText("No jobs");
+        boolean isDisplayed = driver.findElement(resultsNoJobs).isDisplayed();
         Assert.assertTrue(isDisplayed);
     }
 
@@ -189,6 +278,8 @@ public class DiceTests {
 
     private void openMainPage() {
         driver.get(mainPage);
+        //TODO possible improvement for faster execution
+        //driver.navigate().to();
     }
 
     private WebElement signinButton() {
@@ -224,6 +315,17 @@ public class DiceTests {
         String path = System.getProperty("user.dir") + "/src/test/resources/geckodriver";
         System.setProperty("webdriver.gecko.driver", path);
         driver = new FirefoxDriver();
+    }
+
+    @AfterSuite
+    public void afterSuite(){
+        driver.quit();
+    }
+
+    //TODO fix this method to work on both test
+    public By getElementByPartialText(String textToContain) {
+        By result = By.xpath("//*[contains(text(),'" + textToContain + "')]");
+        return result;
     }
 }
 
