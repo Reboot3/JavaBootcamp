@@ -327,6 +327,8 @@ public class DiceTests {
         By result = By.xpath("//*[contains(text(),'" + textToContain + "')]");
         return result;
     }
+
+
 }
 
 
